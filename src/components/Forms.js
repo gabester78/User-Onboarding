@@ -9,46 +9,35 @@ const formSchema = yup.object().shape({
     .email()
     .required("Must include an email"),
   terms: yup.boolean().oneOf([true], "please agree to terms of use"),
-  motivation: yup.string().required("must include why you would like to join"),
+  motivation: yup.string().required("A password is required to join"),
   positions: yup.string()
 });
 
 export default function Form() {
-  // managing state for our form inputs
   const [formState, setFormState] = useState({
     name: "",
     email: "",
     terms: "",
-    positions: "",
     motivation: ""
   });
 
-  // state for our errors
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     terms: "",
-    positions: "",
     motivation: ""
   });
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
-  // new state to set our post request too. So we can console.log and see it.
   const [post, setPost] = useState([]);
 
-  /* Each time the form value state is updated, check to see if it is valid per our schema. 
-  This will allow us to enable/disable the submit button.*/
   useEffect(() => {
-    /* We pass the entire state into the entire schema, no need to use reach here. 
-    We want to make sure it is all valid before we allow a user to submit
-    isValid comes from Yup directly */
     formSchema.isValid(formState).then(valid => {
       setButtonDisabled(!valid);
     });
   }, [formState]);
 
   const validateChange = e => {
-    // Reach will allow us to "reach" into the schema and test only one part.
     yup
       .reach(formSchema, e.target.name)
       .validate(e.target.value)
@@ -77,8 +66,7 @@ export default function Form() {
           name: "",
           email: "",
           terms: "",
-          motivation: "",
-          positions: ""
+          motivation: ""
         });
       })
       .catch(err => {
@@ -110,6 +98,7 @@ export default function Form() {
         />
         {errors.name.length > 0 ? <p className="error">{errors.name}</p> : null}
       </label>
+
       <label htmlFor="email">
         Email
         <input
@@ -123,9 +112,10 @@ export default function Form() {
           <p className="error"> {errors.email}</p>
         ) : null}
       </label>
+
       <label htmlFor="motivation">
         Password
-        <textarea
+        <input
           id="motivation"
           name="motivation"
           value={formState.motivation}
@@ -135,6 +125,7 @@ export default function Form() {
           <p className="error">{errors.motivation}</p>
         ) : null}
       </label>
+
       <label htmlFor="terms" className="terms">
         <input
           type="checkbox"
@@ -144,7 +135,9 @@ export default function Form() {
         />
         Terms and Conditions
       </label>
+
       <pre>{JSON.stringify(post, null, 2)}</pre>
+
       <button disabled={buttonDisabled}>Submit</button>
     </form>
   );
