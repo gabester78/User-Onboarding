@@ -12,7 +12,7 @@ const formSchema = yup.object().shape({
   password: yup
     .string()
     .required("No password provided.")
-    .min(8, "Password is too short - should be 8 chars minimum."),
+    .min(8, "Password should be 8 characters minimum."),
   checkbox: yup
     .boolean()
     .oneOf([true], "Please agree to Terms and Conditions."),
@@ -129,15 +129,20 @@ export default function Form() {
         </label>
       </div>
       <div>
-        <label htmlFor="password">Password (8 characters minimum):</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          minlength="8"
-          value={formState.password}
-          onChange={inputChange}
-        />
+        <label htmlFor="password">
+          Password (8 characters minimum):
+          <input
+            type="password"
+            id="password"
+            name="password"
+            minlength="8"
+            value={formState.password}
+            onChange={inputChange}
+          />
+          {error.password.length < 8 ? (
+            <p className="error">{error.password}</p>
+          ) : null}
+        </label>
       </div>
       <div>
         <label htmlFor="checkbox">Terms and Conditions</label>
