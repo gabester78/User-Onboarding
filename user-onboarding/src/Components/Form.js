@@ -130,7 +130,7 @@ export default function Form() {
       </div>
       <div>
         <label htmlFor="password">
-          Password (8 characters minimum):
+          Password:
           <input
             type="password"
             id="password"
